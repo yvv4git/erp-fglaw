@@ -1,0 +1,11 @@
+development:
+    dialect: sqlite3
+    datasource: db/development.db
+    table: migrations_dev
+    dir: db/migrations
+
+production:
+    dialect: sqlite3
+    datasource: db/production.db
+    table: migrations_prod
+    dir: db/migrations

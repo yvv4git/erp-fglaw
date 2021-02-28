@@ -15,3 +15,28 @@ tests_unit:
 
 run:
 	go run main.go
+
+migrations_init:
+	sql-migrate new -env="development" create_clients_table
+	sql-migrate new -env="development" create_client_types
+	sql-migrate new -env="development" create_deposite
+	sql-migrate new -env="development" file_types
+	sql-migrate new -env="development" create_photo
+	sql-migrate new -env="development" create_product_types
+	sql-migrate new -env="development" create_products
+	sql-migrate new -env="development" create_stock
+	sql-migrate new -env="development" create_suppliers
+	sql-migrate new -env="development" create_transactions
+	sql-migrate new -env="development" create_transaction_status_types
+
+migrations_dev_up:
+	sql-migrate up -env="development"
+
+migrations_dev_down:
+	sql-migrate down -env="development" -dryrun
+
+migrations_prod_up:
+	sql-migrate up -env="production"
+
+migrations_prod_down:
+	sql-migrate down -env="production" -dryrun
