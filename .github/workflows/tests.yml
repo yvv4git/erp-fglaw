@@ -17,8 +17,6 @@ jobs:
         with:
           go-version: 1.15
 
-      - name: Test unit
-        go test -v -tags=unit ./...
+      - name: Tests
+        go test -v ./...
 
-      - name: Test integration
-        go test -v -tags=integration ./...
