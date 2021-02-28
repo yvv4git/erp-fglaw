@@ -1,5 +1,3 @@
-//+build integration
-
 package config
 
 import (
@@ -123,5 +121,36 @@ func TestConfig(t *testing.T) {
 
 		// Check.
 		assert.Equal(t, tc.expect, result)
+	}
+}
+
+func TestWebServerConfig_GetServerAddress(t *testing.T) {
+	testCases := []struct {
+		name            string
+		webServerConfig WebServerConfig
+		expect          string
+	}{
+		{
+			name: "Have all: hostname and port",
+			webServerConfig: WebServerConfig{
+				Host: "localhost",
+				Port: 3001,
+			},
+			expect: "localhost:3001",
+		},
+		{
+			name: "Have only port",
+			webServerConfig: WebServerConfig{
+				Host: "",
+				Port: 3001,
+			},
+			expect: ":3001",
+		},
+	}
+
+	for _, tc := range testCases {
+		result := tc.webServerConfig.GetServerAddress()
+		assert.Equal(t, tc.expect, result)
+
 	}
 }
