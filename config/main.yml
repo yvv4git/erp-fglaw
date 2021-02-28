@@ -1,0 +1,8 @@
+DB:
+  FileName: "db/production.db"
+  Host: "localhost"
+  Port: 3606
+
+WebSrv:
+  Host: "localhost"
+  Port: 8080
