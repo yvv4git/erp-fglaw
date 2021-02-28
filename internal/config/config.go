@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -87,4 +88,9 @@ func parseFilePath(filePath string) (dir string, fileName string, err error) {
 	fileName = path[1]
 
 	return
+}
+
+// GetServerAddress is used for create web server address.
+func (wc WebServerConfig) GetServerAddress() string {
+	return fmt.Sprintf("%s:%d", wc.Host, wc.Port)
 }

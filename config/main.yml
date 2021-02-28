@@ -5,4 +5,4 @@ DB:
 
 WebSrv:
   Host: "localhost"
-  Port: 8080
+  Port: 3001
