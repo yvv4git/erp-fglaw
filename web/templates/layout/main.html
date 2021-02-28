@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <!-- Bootstrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+    <!-- Vue.js -->
+    <script src="https://unpkg.com/vue"></script>
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+
+    <title>!!!!!</title>
+</head>
+
+<body>
+
+    <!-- Top navigation pannel -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <span class="navbar-brand mb-0 h1 badge badge-warning">Vitamed</span>
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="/products">Products <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="/stock">Stock</a>
+            <a class="nav-item nav-link" href="/transactions">Transactions</a>
+            <a class="nav-item nav-link" href="/suppliers">Suppliers</a>
+            <a class="nav-item nav-link" href="/clients">Clients</a>
+            <a class="nav-item nav-link" href="/client_types">Client types</a>
+        </div>
+        </div>
+
+        <div class="navbar-nav mr-auto">
+            <a class="nav-item nav-link" href="/">Exit</a>
+        </div>
+
+    </nav>
+
+    <body>
+        {% block content %}{% endblock %}
+    </body>
+
+    <!-- Footer -->
+    <footer class="footer fixed-bottom mx-auto bg-dark">
+        <div class="container bottom_border">
+            <div class="row">
+                <div class="text-white ">
+                    <!-- <button type="button" class="btn btn-secondary">Exit</button> -->
+                    <p>© Vitamed 2020</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</html
