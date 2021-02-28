@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"github.com/yvv4git/erp-fglaw/internal/config"
+	"github.com/yvv4git/erp-fglaw/internal/controllers"
 )
 
 const (
@@ -27,6 +28,11 @@ func main() {
 	// For graceful shutdown.
 	exit := make(chan os.Signal, 1)
 	signal.Notify(exit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		webServer := controllers.SetupWebServer(cfg)
+		log.Fatal(webServer.Listen(cfg.WebSrv.GetServerAddress()))
+	}()
 
 	// Gracefull exit.
 	<-exit
