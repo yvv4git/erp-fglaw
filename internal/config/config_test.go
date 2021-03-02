@@ -17,7 +17,7 @@ var (
 	envWebSrvPort = fmt.Sprintf("%s_WEBSRV.PORT", prefixEnvironmet)
 )
 
-func TestConfig(t *testing.T) {
+func TestConfig_Reading(t *testing.T) {
 	type environment struct {
 		DBFileName string
 		DBHost     string
