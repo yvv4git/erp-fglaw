@@ -7,7 +7,7 @@ import (
 	"syscall"
 
 	"github.com/yvv4git/erp-fglaw/internal/config"
-	"github.com/yvv4git/erp-fglaw/internal/controllers"
+	"github.com/yvv4git/erp-fglaw/internal/handlers"
 )
 
 const (
@@ -30,7 +30,7 @@ func main() {
 	signal.Notify(exit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
 	go func() {
-		webServer := controllers.SetupWebServer(cfg)
+		webServer := handlers.SetupWebServer(*cfg)
 		log.Fatal(webServer.Listen(cfg.WebSrv.GetServerAddress()))
 	}()
 
