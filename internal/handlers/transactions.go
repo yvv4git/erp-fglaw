@@ -3,11 +3,13 @@ package handlers
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/yvv4git/erp-fglaw/internal/config"
+	"gorm.io/gorm"
 )
 
 // TransactionsHandler is handler.
 type TransactionsHandler struct {
 	config config.Config
+	db     *gorm.DB
 }
 
 func (h *TransactionsHandler) get(c *fiber.Ctx) error {
@@ -17,8 +19,9 @@ func (h *TransactionsHandler) get(c *fiber.Ctx) error {
 }
 
 // NewTransactionsHandler is used as constructor.
-func NewTransactionsHandler(config config.Config) *TransactionsHandler {
+func NewTransactionsHandler(config config.Config, db *gorm.DB) *TransactionsHandler {
 	return &TransactionsHandler{
 		config: config,
+		db:     db,
 	}
 }

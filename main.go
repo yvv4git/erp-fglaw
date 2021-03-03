@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"github.com/yvv4git/erp-fglaw/internal/config"
+	"github.com/yvv4git/erp-fglaw/internal/database"
 	"github.com/yvv4git/erp-fglaw/internal/handlers"
 )
 
@@ -23,6 +24,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	db, err := database.GetInstance(*cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	log.Println(cfg)
 
 	// For graceful shutdown.
@@ -30,7 +36,7 @@ func main() {
 	signal.Notify(exit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
 	go func() {
-		webServer := handlers.SetupWebServer(*cfg)
+		webServer := handlers.SetupWebServer(*cfg, db)
 		log.Fatal(webServer.Listen(cfg.WebSrv.GetServerAddress()))
 	}()
 

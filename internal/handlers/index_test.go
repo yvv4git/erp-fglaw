@@ -11,6 +11,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/yvv4git/erp-fglaw/internal/config"
+	"github.com/yvv4git/erp-fglaw/internal/database"
 )
 
 const (
@@ -39,8 +40,13 @@ func TestMain(m *testing.M) {
 		log.Fatal(err)
 	}
 
+	db, err := database.GetInstance(*cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// Init routes.
-	webServer = SetupWebServer(*cfg)
+	webServer = SetupWebServer(*cfg, db)
 
 	// Run tests.
 	exitVal := m.Run()

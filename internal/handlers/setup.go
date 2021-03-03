@@ -4,10 +4,11 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/django"
 	"github.com/yvv4git/erp-fglaw/internal/config"
+	"gorm.io/gorm"
 )
 
 // SetupWebServer is used for setup web server routes.
-func SetupWebServer(config config.Config) *fiber.App {
+func SetupWebServer(config config.Config, db *gorm.DB) *fiber.App {
 
 	engine := django.New("./web/templates", ".html")
 
@@ -15,13 +16,13 @@ func SetupWebServer(config config.Config) *fiber.App {
 		Views: engine,
 	})
 
-	indexHandler := NewIndexHandler(config)
-	clientsHandler := NewClientsHandler(config)
-	clientTypesHandler := NewClientTypesHandler(config)
-	productsHandler := NewProductsHandler(config)
-	stockHandler := NewStockHandler(config)
-	supplersHandler := NewSupplersHandler(config)
-	transactionsHandler := NewTransactionsHandler(config)
+	indexHandler := NewIndexHandler(config, db)
+	clientsHandler := NewClientsHandler(config, db)
+	clientTypesHandler := NewClientTypesHandler(config, db)
+	productsHandler := NewProductsHandler(config, db)
+	stockHandler := NewStockHandler(config, db)
+	supplersHandler := NewSupplersHandler(config, db)
+	transactionsHandler := NewTransactionsHandler(config, db)
 
 	app.Get("/", indexHandler.get)
 	app.Get("/clients", clientsHandler.get)
