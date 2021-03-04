@@ -30,3 +30,14 @@ func GetInstance(config config.Config) (*gorm.DB, error) {
 
 	return dbInstance, err
 }
+
+// CloseDB connection.
+func CloseDB() {
+	db, err := dbInstance.DB()
+	if err != nil {
+		panic(err)
+	}
+
+	db.Close()
+	dbInstance = nil
+}
