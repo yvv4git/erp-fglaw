@@ -51,10 +51,10 @@ func TestClientTypes_Validate(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			result := tc.form.Validate(tc.form)
+			result, err := Validate(tc.form)
 			if tc.wantErr {
 				assert.False(t, result, tc.description)
-				assert.NotEmpty(t, tc.form.GetErrors(), tc.description)
+				assert.NotEmpty(t, err, tc.description)
 			} else {
 				assert.Equal(t, tc.result, result, tc.description)
 			}

@@ -22,6 +22,7 @@ func TestClients_Validate(t *testing.T) {
 				Address:      "San Francisco 88",
 				CuitCustomer: "12345",
 				ClientPhone:  "123456789012",
+				ClientTypeID: 1,
 			},
 			result:      true,
 			wantErr:     false,
@@ -35,6 +36,7 @@ func TestClients_Validate(t *testing.T) {
 				Address:      "123456789012345678901234567890123456789012345678901234567890",
 				CuitCustomer: "12345",
 				ClientPhone:  "123456789012",
+				ClientTypeID: 1,
 			},
 			result:      false,
 			wantErr:     true,
@@ -48,6 +50,7 @@ func TestClients_Validate(t *testing.T) {
 				Address:      "12345678901234567890",
 				CuitCustomer: "12345",
 				ClientPhone:  "1234567890123456789012345",
+				ClientTypeID: 1,
 			},
 			result:      false,
 			wantErr:     true,
@@ -57,14 +60,13 @@ func TestClients_Validate(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			result := tc.form.Validate(tc.form)
+			result, err := Validate(tc.form)
 			if tc.wantErr {
 				assert.False(t, result, tc.description)
-				assert.NotEmpty(t, tc.form.GetErrors(), tc.description)
+				assert.NotEmpty(t, err, tc.description)
 			} else {
 				assert.Equal(t, tc.result, result, tc.description)
 			}
-			//t.Log(tc.form.GetErrors())
 		})
 	}
 }
