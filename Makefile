@@ -7,6 +7,9 @@ build:
 	GOOS=linux GOARCH=arm go build -o ${BUILD_DIR}/erpfglawArm.bin main.go
 	GOOS=freebsd GOARCH=amd64 go build -o ${BUILD_DIR}/erpfglawFreebsd64.bin main.go
 
+tests_all:
+	go test -v ./...
+
 tests_integration:
 	go test -v -tags=integration ./...
 
