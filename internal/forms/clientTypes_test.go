@@ -10,7 +10,6 @@ func TestClientTypes_Validate(t *testing.T) {
 	testCases := []struct {
 		name        string
 		form        ClientTypes
-		result      bool
 		wantErr     bool
 		description string
 	}{
@@ -21,7 +20,6 @@ func TestClientTypes_Validate(t *testing.T) {
 				ClientType: "Some",
 				ActingAs:   "WTF some",
 			},
-			result:      true,
 			wantErr:     false,
 			description: "This is good form",
 		},
@@ -32,7 +30,6 @@ func TestClientTypes_Validate(t *testing.T) {
 				ClientType: "",
 				ActingAs:   "",
 			},
-			result:      true,
 			wantErr:     false,
 			description: "This is good form #2",
 		},
@@ -43,7 +40,6 @@ func TestClientTypes_Validate(t *testing.T) {
 				ClientType: "1234567890123456789012345",
 				ActingAs:   "1234567890123456789012345",
 			},
-			result:      true,
 			wantErr:     true,
 			description: "Very long words",
 		},
@@ -51,12 +47,11 @@ func TestClientTypes_Validate(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			result, err := Validate(tc.form)
+			err := Validate(tc.form)
 			if tc.wantErr {
-				assert.False(t, result, tc.description)
 				assert.NotEmpty(t, err, tc.description)
 			} else {
-				assert.Equal(t, tc.result, result, tc.description)
+				assert.Empty(t, err, tc.description)
 			}
 		})
 	}
