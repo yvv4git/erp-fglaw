@@ -6,6 +6,7 @@ import (
 	"github.com/yvv4git/erp-fglaw/internal/config"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var mu sync.Mutex
@@ -21,7 +22,13 @@ func GetInstance(config config.Config) (*gorm.DB, error) {
 		defer mu.Unlock()
 
 		if dbInstance == nil {
-			dbInstance, err = gorm.Open(sqlite.Open(config.DB.FileName), &gorm.Config{})
+			dbInstance, err = gorm.Open(
+				sqlite.Open(
+					config.DB.FileName),
+				&gorm.Config{
+					Logger: logger.Default.LogMode(logger.Silent),
+				},
+			)
 			if err != nil {
 				return nil, err
 			}
