@@ -43,6 +43,17 @@ func TestClientTypes_Validate(t *testing.T) {
 			wantErr:     true,
 			description: "Very long words",
 		},
+		{
+			name: "Pagination",
+			form: ClientTypes{
+				pagination: Pagination{
+					Page:  1,
+					Limit: 10,
+				},
+			},
+			wantErr:     false,
+			description: "Validate pagination",
+		},
 	}
 
 	for _, tc := range testCases {

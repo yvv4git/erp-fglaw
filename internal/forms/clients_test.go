@@ -10,7 +10,6 @@ func TestClients_Validate(t *testing.T) {
 	testCases := []struct {
 		name        string
 		form        Clients
-		result      bool
 		wantErr     bool
 		description string
 	}{
@@ -24,7 +23,6 @@ func TestClients_Validate(t *testing.T) {
 				ClientPhone:  "123456789012",
 				ClientTypeID: 1,
 			},
-			result:      true,
 			wantErr:     false,
 			description: "This is good form",
 		},
@@ -38,7 +36,6 @@ func TestClients_Validate(t *testing.T) {
 				ClientPhone:  "123456789012",
 				ClientTypeID: 1,
 			},
-			result:      false,
 			wantErr:     true,
 			description: "Very long address value",
 		},
@@ -52,9 +49,19 @@ func TestClients_Validate(t *testing.T) {
 				ClientPhone:  "1234567890123456789012345",
 				ClientTypeID: 1,
 			},
-			result:      false,
 			wantErr:     true,
 			description: "Very long client phone value",
+		},
+		{
+			name: "Pagination",
+			form: Clients{
+				pagination: Pagination{
+					Page:  1,
+					Limit: 10,
+				},
+			},
+			wantErr:     false,
+			description: "Check pagination validate",
 		},
 	}
 
