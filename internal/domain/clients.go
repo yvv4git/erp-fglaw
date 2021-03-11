@@ -1,4 +1,4 @@
-package models
+package domain
 
 // Clients - model for db entity.
 type Clients struct {

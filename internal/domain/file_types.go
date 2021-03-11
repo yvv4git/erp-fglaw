@@ -1,4 +1,4 @@
-package models
+package domain
 
 // FileTypes - model for db entity.
 type FileTypes struct {

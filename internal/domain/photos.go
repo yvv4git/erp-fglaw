@@ -1,4 +1,4 @@
-package models
+package domain
 
 // Photos - model for db entity.
 type Photos struct {

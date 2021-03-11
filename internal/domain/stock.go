@@ -1,4 +1,4 @@
-package models
+package domain
 
 // Stock is struct of model(склад).
 type Stock struct {

@@ -1,4 +1,4 @@
-package models
+package domain
 
 /*
 TransactionStatusTypes - model of transaction types.
