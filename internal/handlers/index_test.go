@@ -57,7 +57,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestDevConfig(t *testing.T) {
-	assert.Equal(t, "db/development.db", cfg.DB.FileName, "Check testing file name.")
+	assert.Equal(t, "db/test.db", cfg.DB.FileName, "Check testing file name.")
 	assert.Equal(t, "localhost", cfg.DB.Host, "Check db server host.")
 	assert.Equal(t, int32(3306), cfg.DB.Port, "Check db server port.")
 	assert.Equal(t, "localhost", cfg.WebSrv.Host, "Check web server host.")

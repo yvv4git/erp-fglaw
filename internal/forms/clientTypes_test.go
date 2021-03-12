@@ -96,7 +96,7 @@ func TestClientTypes_ReadFirstPage(t *testing.T) {
 				assert.NotEmpty(t, result, tc.description)
 				assert.Empty(t, err, tc.description)
 			}
-			t.Log(result)
+			//t.Log(result)
 		})
 	}
 }
