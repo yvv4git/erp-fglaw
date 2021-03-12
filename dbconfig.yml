@@ -1,6 +1,6 @@
 development:
     dialect: sqlite3
-    datasource: db/development.db
+    datasource: db/test.db
     table: migrations_dev
     dir: db/migrations
 

@@ -1,4 +1,4 @@
-package models
+package domain
 
 // Deposites - model for db entity.
 type Deposites struct {

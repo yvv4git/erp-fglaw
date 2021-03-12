@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	configFile = "../../config/main"
+	configFile = "config/tests"
 )
 
 var (
@@ -35,7 +35,7 @@ func TestMain(m *testing.M) {
 
 	// Step before run tests.
 	// Init config.
-	cfg, err := config.Init(configFile)
+	cfg, err = config.Init(configFile)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -54,6 +54,14 @@ func TestMain(m *testing.M) {
 	// Step after run tests.
 	// ...
 	os.Exit(exitVal)
+}
+
+func TestDevConfig(t *testing.T) {
+	assert.Equal(t, "db/test.db", cfg.DB.FileName, "Check testing file name.")
+	assert.Equal(t, "localhost", cfg.DB.Host, "Check db server host.")
+	assert.Equal(t, int32(3306), cfg.DB.Port, "Check db server port.")
+	assert.Equal(t, "localhost", cfg.WebSrv.Host, "Check web server host.")
+	assert.Equal(t, int32(3005), cfg.WebSrv.Port, "Check web server port.")
 }
 
 func TestIndexHandler_Get(t *testing.T) {

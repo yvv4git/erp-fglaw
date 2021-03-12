@@ -1,4 +1,4 @@
-package models
+package domain
 
 // ProductTypes - model for db entity.
 type ProductTypes struct {

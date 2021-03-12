@@ -1,4 +1,4 @@
-package models
+package domain
 
 // Suppliers is struct of model(поставщики).
 type Suppliers struct {

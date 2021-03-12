@@ -1,8 +1,8 @@
 DB:
-  FileName: "db/development.db"
+  FileName: "db/test.db"
   Host: "localhost"
-  Port: 3606
+  Port: 3306
 
 WebSrv:
   Host: "localhost"
-  Port: 3001
+  Port: 3005

@@ -1,4 +1,4 @@
-package models
+package domain
 
 // Transactions is struct of model.
 type Transactions struct {
