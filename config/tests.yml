@@ -1,5 +1,5 @@
 DB:
-  FileName: "db/development.db"
+  FileName: "db/test.db"
   Host: "localhost"
   Port: 3306
 

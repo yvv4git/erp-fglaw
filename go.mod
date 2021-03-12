@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef
+	github.com/go-testfixtures/testfixtures/v3 v3.5.0
 	github.com/gofiber/fiber/v2 v2.2.2
 	github.com/gofiber/template v1.6.6
 	github.com/spf13/viper v1.7.1

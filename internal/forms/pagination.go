@@ -5,3 +5,8 @@ type Pagination struct {
 	Page  int64 `valid:"type(int64)" json:"page"`
 	Limit int64 `valid:"type(int64)" json:"limit"`
 }
+
+// Offset is used to get offset value.
+func (p Pagination) Offset() int {
+	return int(p.Page) * int(p.Limit)
+}
