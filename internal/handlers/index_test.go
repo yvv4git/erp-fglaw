@@ -1,4 +1,4 @@
-package handlers
+package handlers_test
 
 import (
 	"log"
@@ -8,10 +8,12 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/go-testfixtures/testfixtures/v3"
 	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/yvv4git/erp-fglaw/internal/config"
 	"github.com/yvv4git/erp-fglaw/internal/database"
+	"github.com/yvv4git/erp-fglaw/internal/handlers"
 )
 
 const (
@@ -21,6 +23,7 @@ const (
 var (
 	cfg       *config.Config
 	webServer *fiber.App
+	fixtures  *testfixtures.Loader
 )
 
 func TestMain(m *testing.M) {
@@ -46,7 +49,17 @@ func TestMain(m *testing.M) {
 	}
 
 	// Init routes.
-	webServer = SetupWebServer(*cfg, db)
+	webServer = handlers.SetupWebServer(*cfg, db)
+
+	instanceDB, err := db.DB()
+	fixtures, err = testfixtures.New(
+		testfixtures.Database(instanceDB),
+		testfixtures.Dialect("sqlite"),           // Available: "postgresql", "timescaledb", "mysql", "mariadb", "sqlite" and "sqlserver"
+		testfixtures.Directory("tests/fixtures"), // the directory containing the YAML files
+	)
+	if err != nil {
+		panic(err)
+	}
 
 	// Run tests.
 	exitVal := m.Run()

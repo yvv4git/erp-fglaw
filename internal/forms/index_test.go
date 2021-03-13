@@ -1,4 +1,4 @@
-package forms
+package forms_test
 
 import (
 	"log"
@@ -64,10 +64,4 @@ func TestMain(m *testing.M) {
 	database.CloseDB()
 
 	os.Exit(exitVal)
-}
-
-func prepareTestDatabase() {
-	if err := fixtures.Load(); err != nil {
-		panic(err)
-	}
 }

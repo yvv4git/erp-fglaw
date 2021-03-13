@@ -7,7 +7,7 @@ import (
 
 // ClientTypes form.
 type ClientTypes struct {
-	pagination Pagination
+	Pagination Pagination
 	ID         int64  `valid:"type(int64)" json:"id"`
 	ClientType string `valid:"length(0|20)" json:"ctype"`
 	ActingAs   string `valid:"length(0|20)" json:"actas"`
@@ -20,7 +20,7 @@ func (f *ClientTypes) ReadFirstPage(db *gorm.DB) (result []domain.ClientTypes, e
 
 	// Find in data storage.
 	err = db.Where(&clientTypes).
-		Limit(int(f.pagination.Limit)).
+		Limit(int(f.Pagination.Limit)).
 		Find(&result).Error
 
 	return result, err
@@ -33,8 +33,8 @@ func (f *ClientTypes) ReadPage(db *gorm.DB) (result []domain.ClientTypes, err er
 
 	// Find in data storage.
 	err = db.Where(&clientTypes).
-		Offset(f.pagination.Offset()).
-		Limit(int(f.pagination.Limit)).
+		Offset(f.Pagination.Offset()).
+		Limit(int(f.Pagination.Limit)).
 		Find(&result).Error
 
 	return result, err

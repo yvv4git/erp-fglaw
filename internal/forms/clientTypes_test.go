@@ -1,23 +1,25 @@
-package forms
+package forms_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/yvv4git/erp-fglaw/internal/domain"
+	"github.com/yvv4git/erp-fglaw/internal/forms"
+	"github.com/yvv4git/erp-fglaw/tests"
 	"gorm.io/gorm"
 )
 
 func TestClientTypes_Validate(t *testing.T) {
 	testCases := []struct {
 		name        string
-		form        ClientTypes
+		form        forms.ClientTypes
 		wantErr     bool
 		description string
 	}{
 		{
 			name: "Good form",
-			form: ClientTypes{
+			form: forms.ClientTypes{
 				ID:         1,
 				ClientType: "Some",
 				ActingAs:   "WTF some",
@@ -27,7 +29,7 @@ func TestClientTypes_Validate(t *testing.T) {
 		},
 		{
 			name: "Good form-2",
-			form: ClientTypes{
+			form: forms.ClientTypes{
 				ID:         1,
 				ClientType: "",
 				ActingAs:   "",
@@ -37,7 +39,7 @@ func TestClientTypes_Validate(t *testing.T) {
 		},
 		{
 			name: "Bad form",
-			form: ClientTypes{
+			form: forms.ClientTypes{
 				ID:         1,
 				ClientType: "1234567890123456789012345",
 				ActingAs:   "1234567890123456789012345",
@@ -47,8 +49,8 @@ func TestClientTypes_Validate(t *testing.T) {
 		},
 		{
 			name: "Pagination",
-			form: ClientTypes{
-				pagination: Pagination{
+			form: forms.ClientTypes{
+				Pagination: forms.Pagination{
 					Page:  1,
 					Limit: 10,
 				},
@@ -60,7 +62,7 @@ func TestClientTypes_Validate(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			err := Validate(tc.form)
+			err := forms.Validate(tc.form)
 			if tc.wantErr {
 				assert.NotEmpty(t, err, tc.description)
 			} else {
@@ -73,13 +75,13 @@ func TestClientTypes_Validate(t *testing.T) {
 func TestClientTypes_ReadFirstPage(t *testing.T) {
 	testCases := []struct {
 		name        string
-		form        ClientTypes
+		form        forms.ClientTypes
 		wantErr     bool
 		description string
 	}{
 		{
 			name:        "Read first page",
-			form:        ClientTypes{},
+			form:        forms.ClientTypes{},
 			wantErr:     false,
 			description: "Find data entity in first page",
 		},
@@ -87,7 +89,7 @@ func TestClientTypes_ReadFirstPage(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			prepareTestDatabase()
+			tests.PrepareTestDatabase(fixtures)
 
 			result, err := tc.form.ReadFirstPage(db)
 			if tc.wantErr {
@@ -104,14 +106,14 @@ func TestClientTypes_ReadFirstPage(t *testing.T) {
 func TestClientTypes_ReadPage(t *testing.T) {
 	testCases := []struct {
 		name        string
-		form        ClientTypes
+		form        forms.ClientTypes
 		wantErr     bool
 		description string
 	}{
 		{
 			name: "Read first page",
-			form: ClientTypes{
-				pagination: Pagination{
+			form: forms.ClientTypes{
+				Pagination: forms.Pagination{
 					Page:  0,
 					Limit: 10,
 				},
@@ -121,8 +123,8 @@ func TestClientTypes_ReadPage(t *testing.T) {
 		},
 		{
 			name: "Read second page",
-			form: ClientTypes{
-				pagination: Pagination{
+			form: forms.ClientTypes{
+				Pagination: forms.Pagination{
 					Page:  1,
 					Limit: 10,
 				},
@@ -134,7 +136,7 @@ func TestClientTypes_ReadPage(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			prepareTestDatabase()
+			tests.PrepareTestDatabase(fixtures)
 
 			result, err := tc.form.ReadPage(db)
 			if tc.wantErr {
@@ -151,14 +153,14 @@ func TestClientTypes_ReadPage(t *testing.T) {
 func TestClientTypes_Create(t *testing.T) {
 	testCases := []struct {
 		name        string
-		form        ClientTypes
+		form        forms.ClientTypes
 		wantErr     bool
 		check       func(db *gorm.DB) bool
 		description string
 	}{
 		{
 			name: "Create new client-types",
-			form: ClientTypes{
+			form: forms.ClientTypes{
 				ClientType: "NewClientType-12",
 				ActingAs:   "Some information about actiong as...12",
 			},
@@ -177,7 +179,7 @@ func TestClientTypes_Create(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			prepareTestDatabase()
+			tests.PrepareTestDatabase(fixtures)
 
 			err := tc.form.Create(db)
 			if tc.wantErr {
@@ -194,14 +196,14 @@ func TestClientTypes_Create(t *testing.T) {
 func TestClientTypes_Update(t *testing.T) {
 	testCases := []struct {
 		name        string
-		form        ClientTypes
+		form        forms.ClientTypes
 		check       func(db *gorm.DB) bool
 		wantErr     bool
 		description string
 	}{
 		{
 			name: "Update first entity",
-			form: ClientTypes{
+			form: forms.ClientTypes{
 				ID:         1,
 				ClientType: "Orba Social",
 				ActingAs:   "Updated value",
@@ -221,7 +223,7 @@ func TestClientTypes_Update(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			prepareTestDatabase()
+			tests.PrepareTestDatabase(fixtures)
 
 			err := tc.form.Update(db)
 			if tc.wantErr {
@@ -238,14 +240,14 @@ func TestClientTypes_Update(t *testing.T) {
 func TestClientTypes_Delete(t *testing.T) {
 	testCases := []struct {
 		name        string
-		form        ClientTypes
+		form        forms.ClientTypes
 		check       func(db *gorm.DB) bool
 		wantErr     bool
 		description string
 	}{
 		{
 			name: "Delete entity by id",
-			form: ClientTypes{
+			form: forms.ClientTypes{
 				ID: 1,
 			},
 			check: func(db *gorm.DB) bool {
@@ -262,7 +264,7 @@ func TestClientTypes_Delete(t *testing.T) {
 		},
 		{
 			name: "Delete entity by id, but no found",
-			form: ClientTypes{
+			form: forms.ClientTypes{
 				ID: 100500,
 			},
 			check: func(db *gorm.DB) bool {
@@ -281,7 +283,7 @@ func TestClientTypes_Delete(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			prepareTestDatabase()
+			tests.PrepareTestDatabase(fixtures)
 
 			err := tc.form.Delete(db)
 			if tc.wantErr {

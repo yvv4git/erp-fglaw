@@ -1,21 +1,22 @@
-package forms
+package forms_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/yvv4git/erp-fglaw/internal/forms"
 )
 
 func TestClients_Validate(t *testing.T) {
 	testCases := []struct {
 		name        string
-		form        Clients
+		form        forms.Clients
 		wantErr     bool
 		description string
 	}{
 		{
 			name: "Good form",
-			form: Clients{
+			form: forms.Clients{
 				ID:           1,
 				Number:       1,
 				Address:      "San Francisco 88",
@@ -28,7 +29,7 @@ func TestClients_Validate(t *testing.T) {
 		},
 		{
 			name: "Bad form",
-			form: Clients{
+			form: forms.Clients{
 				ID:           1,
 				Number:       1,
 				Address:      "123456789012345678901234567890123456789012345678901234567890",
@@ -41,7 +42,7 @@ func TestClients_Validate(t *testing.T) {
 		},
 		{
 			name: "Bad form-2",
-			form: Clients{
+			form: forms.Clients{
 				ID:           1,
 				Number:       1,
 				Address:      "12345678901234567890",
@@ -54,8 +55,8 @@ func TestClients_Validate(t *testing.T) {
 		},
 		{
 			name: "Pagination",
-			form: Clients{
-				pagination: Pagination{
+			form: forms.Clients{
+				Pagination: forms.Pagination{
 					Page:  1,
 					Limit: 10,
 				},
@@ -67,7 +68,7 @@ func TestClients_Validate(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			err := Validate(tc.form)
+			err := forms.Validate(tc.form)
 			if tc.wantErr {
 				assert.NotEmpty(t, err, tc.description)
 			} else {
