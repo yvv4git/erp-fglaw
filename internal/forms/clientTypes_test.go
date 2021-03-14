@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func TestClientTypes_Validate(t *testing.T) {
+func TestClientTypesForm_Validate(t *testing.T) {
 	testCases := []struct {
 		name        string
 		form        forms.ClientTypes
@@ -131,7 +131,7 @@ func TestClientTypesForm_ReadPage(t *testing.T) {
 	}
 }
 
-func TestClientTypes_Create(t *testing.T) {
+func TestClientTypesForm_Create(t *testing.T) {
 	testCases := []struct {
 		name        string
 		form        forms.ClientTypes
@@ -174,7 +174,7 @@ func TestClientTypes_Create(t *testing.T) {
 	}
 }
 
-func TestClientTypes_Update(t *testing.T) {
+func TestClientTypesForm_Update(t *testing.T) {
 	testCases := []struct {
 		name        string
 		form        forms.ClientTypes
@@ -218,7 +218,7 @@ func TestClientTypes_Update(t *testing.T) {
 	}
 }
 
-func TestClientTypes_Delete(t *testing.T) {
+func TestClientTypesForm_Delete(t *testing.T) {
 	testCases := []struct {
 		name        string
 		form        forms.ClientTypes
