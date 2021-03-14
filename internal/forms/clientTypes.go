@@ -62,6 +62,12 @@ func (f *ClientTypes) Update(db *gorm.DB) (err error) {
 func (f *ClientTypes) Delete(db *gorm.DB) (err error) {
 	var clientTypes domain.ClientTypes
 
+	// Find record in db.
 	clientTypes.ID = int(f.ID)
+	err = db.First(&clientTypes).Error
+	if err != nil {
+		return err
+	}
+
 	return db.Delete(&clientTypes).Error
 }

@@ -102,9 +102,21 @@ func TestClientTypesForm_ReadPage(t *testing.T) {
 			description: "Read list client-types entities from second page.",
 		},
 		{
-			name: "Find by id.",
+			name: "Find by id #1.",
 			form: forms.ClientTypes{
 				ID: 1,
+				Pagination: forms.Pagination{
+					Page:  0,
+					Limit: 10,
+				},
+			},
+			wantErr:     false,
+			description: "Read list client-types entities from second page.",
+		},
+		{
+			name: "Find by id #2.",
+			form: forms.ClientTypes{
+				ID: 11,
 				Pagination: forms.Pagination{
 					Page:  0,
 					Limit: 10,
@@ -178,27 +190,35 @@ func TestClientTypesForm_Update(t *testing.T) {
 	testCases := []struct {
 		name        string
 		form        forms.ClientTypes
-		check       func(db *gorm.DB) bool
+		check       func(db *gorm.DB)
 		wantErr     bool
 		description string
 	}{
 		{
-			name: "Update first entity",
+			name: "Update first entity.",
 			form: forms.ClientTypes{
 				ID:         1,
 				ClientType: "Orba Social",
 				ActingAs:   "Updated value",
 			},
-			check: func(db *gorm.DB) bool {
+			check: func(db *gorm.DB) {
 				var clientTypes domain.ClientTypes
-				err := db.First(&clientTypes, 10).Error
-				if err != nil {
-					return false
-				}
-				return true
+				err := db.First(&clientTypes, 1).Error
+				assert.Nil(t, err)
+				assert.Equal(t, "Updated value", clientTypes.ActingAs, "Compare updated values.")
 			},
 			wantErr:     false,
 			description: "Update first entity in data storage. Change ActingAs.",
+		},
+		{
+			name: "Attempt to update a non-existent value.",
+			form: forms.ClientTypes{
+				ID:         100500,
+				ClientType: "Orba Social",
+				ActingAs:   "Updated value",
+			},
+			wantErr:     true,
+			description: "Update first entity in data storage, but record not founded.",
 		},
 	}
 
@@ -211,8 +231,7 @@ func TestClientTypesForm_Update(t *testing.T) {
 				assert.NotNil(t, err, tc.description)
 			} else {
 				assert.Nil(t, err, tc.description)
-				status := tc.check(db)
-				assert.True(t, status, "Check entity was updated.")
+				tc.check(db)
 			}
 		})
 	}
@@ -229,7 +248,7 @@ func TestClientTypesForm_Delete(t *testing.T) {
 		{
 			name: "Delete entity by id",
 			form: forms.ClientTypes{
-				ID: 1,
+				ID: 11,
 			},
 			check: func(db *gorm.DB) bool {
 				var clientTypes domain.ClientTypes
@@ -244,20 +263,11 @@ func TestClientTypesForm_Delete(t *testing.T) {
 			description: "Delete entity from data storage by id.",
 		},
 		{
-			name: "Delete entity by id, but no found",
+			name: "Attempt to update a non-existent value.",
 			form: forms.ClientTypes{
 				ID: 100500,
 			},
-			check: func(db *gorm.DB) bool {
-				var clientTypes domain.ClientTypes
-				clientTypes.ID = 1
-				err := db.First(&clientTypes).Error
-				if err != nil {
-					return (err == gorm.ErrRecordNotFound)
-				}
-				return true
-			},
-			wantErr:     false,
+			wantErr:     true,
 			description: "Delete entity from data storage by id, but not found",
 		},
 	}
