@@ -1,19 +1,15 @@
 package handlers_test
 
 import (
-	"log"
 	"net/http"
 	"os"
-	"path"
-	"runtime"
 	"testing"
 
 	"github.com/go-testfixtures/testfixtures/v3"
 	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/yvv4git/erp-fglaw/internal/config"
-	"github.com/yvv4git/erp-fglaw/internal/database"
-	"github.com/yvv4git/erp-fglaw/internal/handlers"
+	"github.com/yvv4git/erp-fglaw/tests"
 )
 
 const (
@@ -27,39 +23,9 @@ var (
 )
 
 func TestMain(m *testing.M) {
-	// Pre-setup.
-	// Change pwd.
-	_, filename, _, _ := runtime.Caller(0)
-	dir := path.Join(path.Dir(filename), "..", "..")
-	err := os.Chdir(dir)
-	if err != nil {
-		panic(err)
-	}
-
-	// Step before run tests.
-	// Init config.
-	cfg, err = config.Init(configFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	db, err := database.GetInstance(*cfg)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Init routes.
-	webServer = handlers.SetupWebServer(*cfg, db)
-
-	instanceDB, err := db.DB()
-	fixtures, err = testfixtures.New(
-		testfixtures.Database(instanceDB),
-		testfixtures.Dialect("sqlite"),           // Available: "postgresql", "timescaledb", "mysql", "mariadb", "sqlite" and "sqlserver"
-		testfixtures.Directory("tests/fixtures"), // the directory containing the YAML files
-	)
-	if err != nil {
-		panic(err)
-	}
+	cfg = tests.Config()
+	webServer = tests.WebServer()
+	fixtures = tests.Fixtures()
 
 	// Run tests.
 	exitVal := m.Run()

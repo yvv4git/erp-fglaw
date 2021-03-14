@@ -72,7 +72,7 @@ func TestClientTypes_Validate(t *testing.T) {
 	}
 }
 
-func TestClientTypes_ReadFirstPage(t *testing.T) {
+func TestClientTypesForm_ReadPage(t *testing.T) {
 	testCases := []struct {
 		name        string
 		form        forms.ClientTypes
@@ -80,38 +80,7 @@ func TestClientTypes_ReadFirstPage(t *testing.T) {
 		description string
 	}{
 		{
-			name:        "Read first page",
-			form:        forms.ClientTypes{},
-			wantErr:     false,
-			description: "Find data entity in first page",
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			tests.PrepareTestDatabase(fixtures)
-
-			result, err := tc.form.ReadFirstPage(db)
-			if tc.wantErr {
-				assert.NotEmpty(t, err, tc.description)
-			} else {
-				assert.NotEmpty(t, result, tc.description)
-				assert.Empty(t, err, tc.description)
-			}
-			//t.Log(result)
-		})
-	}
-}
-
-func TestClientTypes_ReadPage(t *testing.T) {
-	testCases := []struct {
-		name        string
-		form        forms.ClientTypes
-		wantErr     bool
-		description string
-	}{
-		{
-			name: "Read first page",
+			name: "Read first page.",
 			form: forms.ClientTypes{
 				Pagination: forms.Pagination{
 					Page:  0,
@@ -122,10 +91,22 @@ func TestClientTypes_ReadPage(t *testing.T) {
 			description: "Read list client-types entities from first page.",
 		},
 		{
-			name: "Read second page",
+			name: "Read second page.",
 			form: forms.ClientTypes{
 				Pagination: forms.Pagination{
 					Page:  1,
+					Limit: 10,
+				},
+			},
+			wantErr:     false,
+			description: "Read list client-types entities from second page.",
+		},
+		{
+			name: "Find by id.",
+			form: forms.ClientTypes{
+				ID: 1,
+				Pagination: forms.Pagination{
+					Page:  0,
 					Limit: 10,
 				},
 			},
@@ -136,7 +117,7 @@ func TestClientTypes_ReadPage(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			tests.PrepareTestDatabase(fixtures)
+			tests.PrepareTestDatabase()
 
 			result, err := tc.form.ReadPage(db)
 			if tc.wantErr {
@@ -179,7 +160,7 @@ func TestClientTypes_Create(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			tests.PrepareTestDatabase(fixtures)
+			tests.PrepareTestDatabase()
 
 			err := tc.form.Create(db)
 			if tc.wantErr {
@@ -223,7 +204,7 @@ func TestClientTypes_Update(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			tests.PrepareTestDatabase(fixtures)
+			tests.PrepareTestDatabase()
 
 			err := tc.form.Update(db)
 			if tc.wantErr {
@@ -283,7 +264,7 @@ func TestClientTypes_Delete(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			tests.PrepareTestDatabase(fixtures)
+			tests.PrepareTestDatabase()
 
 			err := tc.form.Delete(db)
 			if tc.wantErr {

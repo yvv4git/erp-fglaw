@@ -13,23 +13,13 @@ type ClientTypes struct {
 	ActingAs   string `valid:"length(0|20)" json:"actas"`
 }
 
-// ReadFirstPage is used to get a list of client-types entities on first page.
-func (f *ClientTypes) ReadFirstPage(db *gorm.DB) (result []domain.ClientTypes, err error) {
-	// Fill from form.
-	var clientTypes domain.ClientTypes
-
-	// Find in data storage.
-	err = db.Where(&clientTypes).
-		Limit(int(f.Pagination.Limit)).
-		Find(&result).Error
-
-	return result, err
-}
-
 // ReadPage is used to find list of client-types entities by page number.
 func (f *ClientTypes) ReadPage(db *gorm.DB) (result []domain.ClientTypes, err error) {
 	// Fill from form.
 	var clientTypes domain.ClientTypes
+	clientTypes.ID = int(f.ID)
+	clientTypes.ClientType = f.ClientType
+	clientTypes.ActingAs = f.ActingAs
 
 	// Find in data storage.
 	err = db.Where(&clientTypes).

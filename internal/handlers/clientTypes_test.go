@@ -109,7 +109,7 @@ func TestClientTypesHandler(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			tests.PrepareTestDatabase(fixtures)
+			tests.PrepareTestDatabase()
 
 			request, err := tc.request()
 			if err != nil {
@@ -168,7 +168,7 @@ func TestClientTypes_Create(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			tests.PrepareTestDatabase(fixtures)
+			tests.PrepareTestDatabase()
 
 			request, err := tc.request()
 			if err != nil {
@@ -228,7 +228,7 @@ func TestClientTypes_Update(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			tests.PrepareTestDatabase(fixtures)
+			tests.PrepareTestDatabase()
 
 			request, err := tc.request()
 			if err != nil {
@@ -286,7 +286,7 @@ func TestClientTypes_Delete(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			tests.PrepareTestDatabase(fixtures)
+			tests.PrepareTestDatabase()
 
 			request, err := tc.request()
 			if err != nil {
