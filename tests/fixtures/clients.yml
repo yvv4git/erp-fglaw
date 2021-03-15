@@ -1,0 +1,20 @@
+- id: 1
+  number: 2
+  address: 206 E 95th St, New York, NY 10128, USA
+  cuit_customer: Some unknown string
+  client_phone: +12345678901
+  client_type_id: 1
+
+- id: 2
+  number: 2
+  address: 93 Worth St, New York, NY 10013, USA
+  cuit_customer: Some unknown string
+  client_phone: +12345678902
+  client_type_id: 2
+
+- id: 3
+  number: 3
+  address: 117 East 57th Street, New York, NY 10022
+  cuit_customer: Some unknown string
+  client_phone: +12345678903
+  client_type_id: 3
