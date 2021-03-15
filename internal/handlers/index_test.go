@@ -1,17 +1,15 @@
-package handlers
+package handlers_test
 
 import (
-	"log"
 	"net/http"
 	"os"
-	"path"
-	"runtime"
 	"testing"
 
+	"github.com/go-testfixtures/testfixtures/v3"
 	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/yvv4git/erp-fglaw/internal/config"
-	"github.com/yvv4git/erp-fglaw/internal/database"
+	"github.com/yvv4git/erp-fglaw/tests"
 )
 
 const (
@@ -21,32 +19,13 @@ const (
 var (
 	cfg       *config.Config
 	webServer *fiber.App
+	fixtures  *testfixtures.Loader
 )
 
 func TestMain(m *testing.M) {
-	// Pre-setup.
-	// Change pwd.
-	_, filename, _, _ := runtime.Caller(0)
-	dir := path.Join(path.Dir(filename), "..", "..")
-	err := os.Chdir(dir)
-	if err != nil {
-		panic(err)
-	}
-
-	// Step before run tests.
-	// Init config.
-	cfg, err = config.Init(configFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	db, err := database.GetInstance(*cfg)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Init routes.
-	webServer = SetupWebServer(*cfg, db)
+	cfg = tests.Config()
+	webServer = tests.WebServer()
+	fixtures = tests.Fixtures()
 
 	// Run tests.
 	exitVal := m.Run()

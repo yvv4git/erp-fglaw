@@ -1,4 +1,4 @@
-package handlers
+package handlers_test
 
 import (
 	"bytes"
@@ -9,6 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/yvv4git/erp-fglaw/internal/forms"
+	"github.com/yvv4git/erp-fglaw/tests"
 )
 
 func TestClientsHandler(t *testing.T) {
@@ -103,6 +104,8 @@ func TestClientsHandler(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
+			tests.PrepareTestDatabase()
+
 			request, err := tc.request()
 			if err != nil {
 				t.Fatal(err)

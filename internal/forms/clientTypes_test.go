@@ -1,23 +1,25 @@
-package forms
+package forms_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/yvv4git/erp-fglaw/internal/domain"
+	"github.com/yvv4git/erp-fglaw/internal/forms"
+	"github.com/yvv4git/erp-fglaw/tests"
 	"gorm.io/gorm"
 )
 
-func TestClientTypes_Validate(t *testing.T) {
+func TestClientTypesForm_Validate(t *testing.T) {
 	testCases := []struct {
 		name        string
-		form        ClientTypes
+		form        forms.ClientTypes
 		wantErr     bool
 		description string
 	}{
 		{
 			name: "Good form",
-			form: ClientTypes{
+			form: forms.ClientTypes{
 				ID:         1,
 				ClientType: "Some",
 				ActingAs:   "WTF some",
@@ -27,7 +29,7 @@ func TestClientTypes_Validate(t *testing.T) {
 		},
 		{
 			name: "Good form-2",
-			form: ClientTypes{
+			form: forms.ClientTypes{
 				ID:         1,
 				ClientType: "",
 				ActingAs:   "",
@@ -37,7 +39,7 @@ func TestClientTypes_Validate(t *testing.T) {
 		},
 		{
 			name: "Bad form",
-			form: ClientTypes{
+			form: forms.ClientTypes{
 				ID:         1,
 				ClientType: "1234567890123456789012345",
 				ActingAs:   "1234567890123456789012345",
@@ -47,8 +49,8 @@ func TestClientTypes_Validate(t *testing.T) {
 		},
 		{
 			name: "Pagination",
-			form: ClientTypes{
-				pagination: Pagination{
+			form: forms.ClientTypes{
+				Pagination: forms.Pagination{
 					Page:  1,
 					Limit: 10,
 				},
@@ -60,7 +62,7 @@ func TestClientTypes_Validate(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			err := Validate(tc.form)
+			err := forms.Validate(tc.form)
 			if tc.wantErr {
 				assert.NotEmpty(t, err, tc.description)
 			} else {
@@ -70,48 +72,17 @@ func TestClientTypes_Validate(t *testing.T) {
 	}
 }
 
-func TestClientTypes_ReadFirstPage(t *testing.T) {
+func TestClientTypesForm_ReadPage(t *testing.T) {
 	testCases := []struct {
 		name        string
-		form        ClientTypes
+		form        forms.ClientTypes
 		wantErr     bool
 		description string
 	}{
 		{
-			name:        "Read first page",
-			form:        ClientTypes{},
-			wantErr:     false,
-			description: "Find data entity in first page",
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			prepareTestDatabase()
-
-			result, err := tc.form.ReadFirstPage(db)
-			if tc.wantErr {
-				assert.NotEmpty(t, err, tc.description)
-			} else {
-				assert.NotEmpty(t, result, tc.description)
-				assert.Empty(t, err, tc.description)
-			}
-			//t.Log(result)
-		})
-	}
-}
-
-func TestClientTypes_ReadPage(t *testing.T) {
-	testCases := []struct {
-		name        string
-		form        ClientTypes
-		wantErr     bool
-		description string
-	}{
-		{
-			name: "Read first page",
-			form: ClientTypes{
-				pagination: Pagination{
+			name: "Read first page.",
+			form: forms.ClientTypes{
+				Pagination: forms.Pagination{
 					Page:  0,
 					Limit: 10,
 				},
@@ -120,10 +91,34 @@ func TestClientTypes_ReadPage(t *testing.T) {
 			description: "Read list client-types entities from first page.",
 		},
 		{
-			name: "Read second page",
-			form: ClientTypes{
-				pagination: Pagination{
+			name: "Read second page.",
+			form: forms.ClientTypes{
+				Pagination: forms.Pagination{
 					Page:  1,
+					Limit: 10,
+				},
+			},
+			wantErr:     false,
+			description: "Read list client-types entities from second page.",
+		},
+		{
+			name: "Find by id #1.",
+			form: forms.ClientTypes{
+				ID: 1,
+				Pagination: forms.Pagination{
+					Page:  0,
+					Limit: 10,
+				},
+			},
+			wantErr:     false,
+			description: "Read list client-types entities from second page.",
+		},
+		{
+			name: "Find by id #2.",
+			form: forms.ClientTypes{
+				ID: 11,
+				Pagination: forms.Pagination{
+					Page:  0,
 					Limit: 10,
 				},
 			},
@@ -134,7 +129,7 @@ func TestClientTypes_ReadPage(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			prepareTestDatabase()
+			tests.PrepareTestDatabase()
 
 			result, err := tc.form.ReadPage(db)
 			if tc.wantErr {
@@ -148,17 +143,17 @@ func TestClientTypes_ReadPage(t *testing.T) {
 	}
 }
 
-func TestClientTypes_Create(t *testing.T) {
+func TestClientTypesForm_Create(t *testing.T) {
 	testCases := []struct {
 		name        string
-		form        ClientTypes
+		form        forms.ClientTypes
 		wantErr     bool
 		check       func(db *gorm.DB) bool
 		description string
 	}{
 		{
 			name: "Create new client-types",
-			form: ClientTypes{
+			form: forms.ClientTypes{
 				ClientType: "NewClientType-12",
 				ActingAs:   "Some information about actiong as...12",
 			},
@@ -177,7 +172,7 @@ func TestClientTypes_Create(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			prepareTestDatabase()
+			tests.PrepareTestDatabase()
 
 			err := tc.form.Create(db)
 			if tc.wantErr {
@@ -191,62 +186,69 @@ func TestClientTypes_Create(t *testing.T) {
 	}
 }
 
-func TestClientTypes_Update(t *testing.T) {
+func TestClientTypesForm_Update(t *testing.T) {
 	testCases := []struct {
 		name        string
-		form        ClientTypes
-		check       func(db *gorm.DB) bool
+		form        forms.ClientTypes
+		check       func(db *gorm.DB)
 		wantErr     bool
 		description string
 	}{
 		{
-			name: "Update first entity",
-			form: ClientTypes{
+			name: "Update first entity.",
+			form: forms.ClientTypes{
 				ID:         1,
 				ClientType: "Orba Social",
 				ActingAs:   "Updated value",
 			},
-			check: func(db *gorm.DB) bool {
+			check: func(db *gorm.DB) {
 				var clientTypes domain.ClientTypes
-				err := db.First(&clientTypes, 10).Error
-				if err != nil {
-					return false
-				}
-				return true
+				err := db.First(&clientTypes, 1).Error
+				assert.Nil(t, err)
+				assert.Equal(t, "Updated value", clientTypes.ActingAs, "Compare updated values.")
 			},
 			wantErr:     false,
 			description: "Update first entity in data storage. Change ActingAs.",
+		},
+		{
+			name: "Attempt to update a non-existent value.",
+			form: forms.ClientTypes{
+				ID:         100500,
+				ClientType: "Orba Social",
+				ActingAs:   "Updated value",
+			},
+			wantErr:     true,
+			description: "Update first entity in data storage, but record not founded.",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			prepareTestDatabase()
+			tests.PrepareTestDatabase()
 
 			err := tc.form.Update(db)
 			if tc.wantErr {
 				assert.NotNil(t, err, tc.description)
 			} else {
 				assert.Nil(t, err, tc.description)
-				status := tc.check(db)
-				assert.True(t, status, "Check entity was updated.")
+				tc.check(db)
 			}
 		})
 	}
 }
 
-func TestClientTypes_Delete(t *testing.T) {
+func TestClientTypesForm_Delete(t *testing.T) {
 	testCases := []struct {
 		name        string
-		form        ClientTypes
+		form        forms.ClientTypes
 		check       func(db *gorm.DB) bool
 		wantErr     bool
 		description string
 	}{
 		{
 			name: "Delete entity by id",
-			form: ClientTypes{
-				ID: 1,
+			form: forms.ClientTypes{
+				ID: 11,
 			},
 			check: func(db *gorm.DB) bool {
 				var clientTypes domain.ClientTypes
@@ -261,27 +263,18 @@ func TestClientTypes_Delete(t *testing.T) {
 			description: "Delete entity from data storage by id.",
 		},
 		{
-			name: "Delete entity by id, but no found",
-			form: ClientTypes{
+			name: "Attempt to update a non-existent value.",
+			form: forms.ClientTypes{
 				ID: 100500,
 			},
-			check: func(db *gorm.DB) bool {
-				var clientTypes domain.ClientTypes
-				clientTypes.ID = 1
-				err := db.First(&clientTypes).Error
-				if err != nil {
-					return (err == gorm.ErrRecordNotFound)
-				}
-				return true
-			},
-			wantErr:     false,
+			wantErr:     true,
 			description: "Delete entity from data storage by id, but not found",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			prepareTestDatabase()
+			tests.PrepareTestDatabase()
 
 			err := tc.form.Delete(db)
 			if tc.wantErr {
