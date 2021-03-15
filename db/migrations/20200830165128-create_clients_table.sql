@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS clients (
     address VARCHAR(255),
     cuit_customer VARCHAR(255),
     client_phone VARCHAR(50),
-    client_type_id INTEGER
+    client_type_id INTEGER,
+    FOREIGN KEY (client_type_id) REFERENCES client_types(id)
 );
 
 -- +migrate Down
