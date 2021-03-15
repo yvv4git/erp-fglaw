@@ -30,12 +30,14 @@ func (h *ClientsHandler) read(c *fiber.Ctx) error {
 		return err
 	}
 
+	result, err := form.ReadPage(h.db)
+	if err != nil {
+		return err
+	}
+
 	return c.
 		Status(200).
-		JSON(&fiber.Map{
-			"status":  true,
-			"message": "list",
-		})
+		JSON(result)
 }
 
 func (h *ClientsHandler) create(c *fiber.Ctx) error {
@@ -49,11 +51,14 @@ func (h *ClientsHandler) create(c *fiber.Ctx) error {
 		return err
 	}
 
+	if err := form.Create(h.db); err != nil {
+		return err
+	}
+
 	return c.
 		Status(200).
 		JSON(&fiber.Map{
-			"success": false,
-			"message": "create",
+			"success": true,
 		})
 }
 
@@ -68,11 +73,14 @@ func (h *ClientsHandler) update(c *fiber.Ctx) error {
 		return err
 	}
 
+	if err := form.Update(h.db); err != nil {
+		return err
+	}
+
 	return c.
 		Status(200).
 		JSON(&fiber.Map{
-			"success": false,
-			"message": "update",
+			"success": true,
 		})
 }
 
@@ -87,11 +95,14 @@ func (h *ClientsHandler) delete(c *fiber.Ctx) error {
 		return err
 	}
 
+	if err := form.Delete(h.db); err != nil {
+		return err
+	}
+
 	return c.
 		Status(200).
 		JSON(&fiber.Map{
-			"success": false,
-			"message": "delete",
+			"success": true,
 		})
 }
 
