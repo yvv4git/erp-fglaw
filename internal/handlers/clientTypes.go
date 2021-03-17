@@ -15,14 +15,14 @@ type ClientTypesHandler struct {
 
 func (h *ClientTypesHandler) main(c *fiber.Ctx) error {
 	return c.Render("client_types/index", fiber.Map{
-		"Title": "Main page",
+		"Title": "Client types",
 	})
 }
 
 func (h *ClientTypesHandler) read(c *fiber.Ctx) error {
 	form := new(forms.ClientTypes)
 
-	if err := c.BodyParser(form); err != nil {
+	if err := c.QueryParser(form); err != nil {
 		return err
 	}
 
