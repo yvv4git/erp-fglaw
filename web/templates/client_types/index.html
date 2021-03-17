@@ -3,40 +3,214 @@
 {% block content %}
 
 <div class="jumbotron bg-white">
-    <!-- <h3>{{Title}}</h3> -->
-    <div role="main" class="container row"></main>
+  <!-- <h3>{{Title}}</h3> -->
+  <div role="main" class="container row" id="clientTypesApp">
+    <!-- Begin container -->
 
-      <div class="card">
-        <div class="card-header">
-          {{ Title }}
-        </div>
-        <div class="card-body">
-          <!-- <h5 class="card-title">Main menu</h5> -->
+    <!-- Table -->
+    <div class="card">
 
-          <ul class="list-group">
-            <li class="list-group-item">
-              <a href="/products" class="card-link text-dark">Products</a>
-            </li>
-            <li class="list-group-item">
-              <a href="/stock" class="card-link text-dark">Stock</a>
-            </li>
-            <li class="list-group-item">
-              <a href="/transactions" class="card-link text-dark">Transactions</a>
-            </li>
-            <li class="list-group-item">
-              <a href="/supplers" class="card-link text-dark">Suppliers</a>
-            </li>
-            <li class="list-group-item">
-              <a href="/clients" class="card-link text-dark">Clients</a>
-            </li>
-            <li class="list-group-item">
-              <a href="/client_types" class="card-link text-dark">Client types</a>
-            </li>
-          </ul>
-
-        </div>
+      <!-- Header block -->
+      <div class="card-header">
+        Client types
       </div>
 
+      <div class="card-body">
+
+        <!-- Actions block -->
+        <div class="btn-group" role="group" aria-label="Button menu">
+          <button type="button" class="btn btn-warning" v-on:click="addFormShow">Add</button>
+        </div>
+
+        <!-- Table block -->
+        <table class="table table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th>ID</th>
+              <th>Client type</th>
+              <th>Acting as</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in clientTypes" v-bind:key="item.ID">
+              <td>{(item.ID)}</td>
+              <td>{(item.ClientType)}</td>
+              <td>{(item.ActingAs)}</td>
+              <td>
+                <i class="bi-pencil-fill" v-on:click="editFormShow(item)"></i>
+                <i class="bi-trash" v-on:click="submitDeleteForm(item.ID)"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Pagination block -->
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-secondary" v-on:click="pageLeft">Left</button>
+          <button type="button" class="btn btn-secondary" disabled>{(page+1)}/{(pagesCount)}</button>
+          <button type="button" class="btn btn-secondary" v-on:click="pageRight">Right</button>
+        </div>
+
+      </div>
     </div>
+
+    <!-- Form add -->
+    <div class="card ml-3" v-if="showFormAdd">
+      <div class="card-header">
+        Add
+      </div>
+      <div class="card-body">
+
+        <form id="clientTypesFormAdd">
+          <div class="form-group">
+            <label for="clientType">Client type</label>
+            <input type="text" class="form-control" id="clientType" v-model="formAdd['type']">
+            <small id="emailHelp" class="form-text text-muted">Name of client type</small>
+          </div>
+          <div class="form-group">
+            <label for="actingAs">Acting as</label>
+            <input type="text" class="form-control" id="actingAs" v-model="formAdd['act']">
+            <small id="emailHelp" class="form-text text-muted">I'dont known what is this)</small>
+          </div>
+          <button type="button" class="btn btn-warning" v-on:click="submitAddForm">Add</button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- Form edit -->
+    <div class="card ml-3" v-if="showFormEdit">
+      <div class="card-header">
+        Edit
+      </div>
+      <div class="card-body">
+
+        <form id="clientTypesFormEdit">
+          <div class="form-group">
+            <label for="clientType">Client type</label>
+            <input type="text" class="form-control" name="type" v-model="formEdit.type">
+          </div>
+          <div class="form-group">
+            <label for="actingAs">Acting as</label>
+            <input type="text" class="form-control" name="act" v-model="formEdit.act">
+          </div>
+          <button type="button" class="btn btn-warning" v-on:click="submitEditForm">Edit</button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- End of container -->
   </div>
+</div>
+
+<script>
+  new Vue({
+    el: '#clientTypesApp',
+    delimiters: ['{(', ')}'],
+    data: {
+      showFormAdd: false,
+      showFormEdit: false,
+      limit: 10,
+      page: 0,
+      pagesCount: 0,
+      clientTypes: {},
+      formAdd: {},
+      formEdit: {},
+    },
+    methods: {
+      addFormShow: function () {
+        this.showFormAdd = !this.showFormAdd;
+        this.showFormEdit = false;
+      },
+      editFormShow: function (clientTypes) {
+        this.showFormAdd = false;
+        this.showFormEdit = false;
+        this.formEdit.id = clientTypes.ID;
+        this.formEdit.type = clientTypes.ClientType;
+        this.formEdit.act = clientTypes.ActingAs;
+        this.showFormEdit = true;
+      },
+      loadTable: function () {
+        vm = this;
+        axios
+          .get('http://localhost:3001/client-types/read', {
+            params: {
+              limit: this.limit,
+              page: this.page,
+            }
+          })
+          .then(function (response) {
+            vm.clientTypes = response.data;
+            vm.pagesCount = Math.ceil(response.data.length / vm.limit);
+          })
+          .catch(function (error) {
+            console.log('Error with request to get client-types: ' + error)
+          });
+      },
+      pageLeft: function () {
+        if (this.page > 0) {
+          this.page--;
+        }
+        this.loadTable();
+      },
+      pageRight: function () {
+        this.page++;
+        this.loadTable();
+      },
+      submitAddForm: function () {
+        console.log('submitAddForm');
+        const headers = {
+          'content-type': 'application/json',
+        };
+        let vm = this;
+        axios
+          .post('http://localhost:3001/client-types/create', vm.formAdd, headers)
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+        this.loadTable();
+      },
+      submitEditForm: function () {
+        console.log('submitEditForm');
+        const headers = {
+          'content-type': 'application/json',
+        };
+        let vm = this;
+        axios
+          .put('http://localhost:3001/client-types/update', vm.formEdit, headers)
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+        this.loadTable();
+      },
+      submitDeleteForm: function (elementID) {
+        console.log('submitDeleteForm: ', elementID);
+        axios
+          .delete('http://localhost:3001/client-types/delete', { data: { id: elementID } })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+        this.loadTable();
+      }
+    },
+    mounted() {
+      this.loadTable();
+    },
+  });
+</script>
+
 {% endblock %}
