@@ -287,3 +287,38 @@ func TestClientTypesForm_Delete(t *testing.T) {
 		})
 	}
 }
+
+func TestClientTypesForm_Count(t *testing.T) {
+	testCases := []struct {
+		name        string
+		form        forms.ClientTypes
+		expect      int64
+		description string
+	}{
+		{
+			name:        "Calculate all client-types",
+			form:        forms.ClientTypes{},
+			expect:      11,
+			description: "Calculate count of all client-types entities in data storage",
+		},
+		{
+			name: "Calculate all client-types",
+			form: forms.ClientTypes{
+				ClientType: "Orba Social",
+			},
+			expect:      1,
+			description: "Calculate count of all client-types entities in data storage",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			tests.PrepareTestDatabase()
+
+			db := tests.DB()
+			count, err := tc.form.Count(db)
+			assert.Nil(t, err)
+			assert.Equal(t, tc.expect, count, tc.description)
+		})
+	}
+}
