@@ -30,14 +30,22 @@ func (h *ClientTypesHandler) read(c *fiber.Ctx) error {
 		return err
 	}
 
-	result, err := form.ReadPage(h.db)
+	clientTypes, err := form.ReadPage(h.db)
+	if err != nil {
+		return err
+	}
+
+	count, err := form.Count(h.db)
 	if err != nil {
 		return err
 	}
 
 	return c.
 		Status(200).
-		JSON(result)
+		JSON(fiber.Map{
+			"client_types": clientTypes,
+			"count":        count,
+		})
 }
 
 func (h *ClientTypesHandler) create(c *fiber.Ctx) error {

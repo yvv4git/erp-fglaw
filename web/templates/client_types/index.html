@@ -142,8 +142,8 @@
             }
           })
           .then(function (response) {
-            vm.clientTypes = response.data;
-            vm.pagesCount = Math.ceil(response.data.length / vm.limit);
+            vm.clientTypes = response.data.client_types;
+            vm.pagesCount = Math.ceil(response.data.count / vm.limit);
           })
           .catch(function (error) {
             console.log('Error with request to get client-types: ' + error)
