@@ -7,7 +7,7 @@ import (
 
 // ClientTypes form.
 type ClientTypes struct {
-	Pagination Pagination
+	Pagination
 	ID         int64  `valid:"type(int64)" json:"id"`
 	ClientType string `valid:"length(0|20)" json:"ctype"`
 	ActingAs   string `valid:"length(0|20)" json:"actas"`
@@ -70,4 +70,17 @@ func (f *ClientTypes) Delete(db *gorm.DB) (err error) {
 	}
 
 	return db.Delete(&clientTypes).Error
+}
+
+// Count is used for provides the number of records relevant to the query..
+func (f *ClientTypes) Count(db *gorm.DB) (result int64, err error) {
+	// Fill from form.
+	var clientTypes domain.ClientTypes
+	clientTypes.ID = int(f.ID)
+	clientTypes.ClientType = f.ClientType
+	clientTypes.ActingAs = f.ActingAs
+
+	// Find in data storage.
+	err = db.Model(&domain.ClientTypes{}).Where(&clientTypes).Count(&result).Error
+	return
 }

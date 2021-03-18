@@ -14,15 +14,15 @@ type ClientTypesHandler struct {
 }
 
 func (h *ClientTypesHandler) main(c *fiber.Ctx) error {
-	return c.Render("clienttypes/index", fiber.Map{
-		"Title": "Main page",
+	return c.Render("client_types/index", fiber.Map{
+		"Title": "Client types",
 	})
 }
 
 func (h *ClientTypesHandler) read(c *fiber.Ctx) error {
 	form := new(forms.ClientTypes)
 
-	if err := c.BodyParser(form); err != nil {
+	if err := c.QueryParser(form); err != nil {
 		return err
 	}
 
@@ -30,14 +30,22 @@ func (h *ClientTypesHandler) read(c *fiber.Ctx) error {
 		return err
 	}
 
-	result, err := form.ReadPage(h.db)
+	clientTypes, err := form.ReadPage(h.db)
+	if err != nil {
+		return err
+	}
+
+	count, err := form.Count(h.db)
 	if err != nil {
 		return err
 	}
 
 	return c.
 		Status(200).
-		JSON(result)
+		JSON(fiber.Map{
+			"client_types": clientTypes,
+			"count":        count,
+		})
 }
 
 func (h *ClientTypesHandler) create(c *fiber.Ctx) error {
