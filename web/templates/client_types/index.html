@@ -65,12 +65,12 @@
         <form id="clientTypesFormAdd">
           <div class="form-group">
             <label for="clientType">Client type</label>
-            <input type="text" class="form-control" id="clientType" v-model="formAdd['type']">
+            <input type="text" class="form-control" id="clientType" v-model="formAdd['ctype']">
             <small id="emailHelp" class="form-text text-muted">Name of client type</small>
           </div>
           <div class="form-group">
             <label for="actingAs">Acting as</label>
-            <input type="text" class="form-control" id="actingAs" v-model="formAdd['act']">
+            <input type="text" class="form-control" id="actingAs" v-model="formAdd['actas']">
             <small id="emailHelp" class="form-text text-muted">I'dont known what is this)</small>
           </div>
           <button type="button" class="btn btn-warning" v-on:click="submitAddForm">Add</button>
@@ -89,11 +89,11 @@
         <form id="clientTypesFormEdit">
           <div class="form-group">
             <label for="clientType">Client type</label>
-            <input type="text" class="form-control" name="type" v-model="formEdit.type">
+            <input type="text" class="form-control" name="ctype" v-model="formEdit.ctype">
           </div>
           <div class="form-group">
             <label for="actingAs">Acting as</label>
-            <input type="text" class="form-control" name="act" v-model="formEdit.act">
+            <input type="text" class="form-control" name="actas" v-model="formEdit.actas">
           </div>
           <button type="button" class="btn btn-warning" v-on:click="submitEditForm">Edit</button>
         </form>
@@ -128,8 +128,8 @@
         this.showFormAdd = false;
         this.showFormEdit = false;
         this.formEdit.id = clientTypes.ID;
-        this.formEdit.type = clientTypes.ClientType;
-        this.formEdit.act = clientTypes.ActingAs;
+        this.formEdit.ctype = clientTypes.ClientType;
+        this.formEdit.actas = clientTypes.ActingAs;
         this.showFormEdit = true;
       },
       loadTable: function () {
