@@ -23,24 +23,6 @@ func TestClientsHandler(t *testing.T) {
 		description      string
 	}{
 		{
-			name: "Update clients",
-			request: func() (req *http.Request, err error) {
-				form := forms.Clients{
-					ID:           1,
-					Number:       2,
-					Address:      "San Fancisco Main street 88",
-					CuitCustomer: "Some customer",
-					ClientPhone:  "123456789012",
-					ClientTypeID: 1,
-				}
-				jsonForm, _ := json.Marshal(form)
-				req, err = http.NewRequest("PUT", "/clients/update", bytes.NewBuffer(jsonForm))
-				req.Header.Set("Content-Type", "application/json")
-				return
-			},
-			expectStatusCode: 200,
-		},
-		{
 			name: "Delete clients",
 			request: func() (req *http.Request, err error) {
 				form := forms.Clients{
@@ -235,6 +217,75 @@ func TestClientsHandler_Create(t *testing.T) {
 				bodyBytes, err := ioutil.ReadAll(body)
 				assert.Nil(t, err)
 				//t.Log(string(bodyBytes))
+				var resCreate resultCreate
+				err = json.Unmarshal(bodyBytes, &resCreate)
+				assert.Nil(t, err)
+				assert.True(t, resCreate.Success)
+			},
+			expectStatusCode: 200,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			tests.PrepareTestDatabase()
+
+			request, err := tc.request()
+			if err != nil {
+				t.Fatal(err)
+			}
+			result, err := webServer.Test(request)
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer result.Body.Close()
+
+			assert.Equal(t, tc.expectStatusCode, result.StatusCode, tc.description)
+			if tc.check != nil {
+				tc.check(result.Body)
+			}
+
+			if result.StatusCode == 500 {
+				body, err := ioutil.ReadAll(result.Body)
+				assert.Nil(t, err)
+				t.Log(string(body))
+			}
+		})
+	}
+}
+
+func TestClientsHandler_Update(t *testing.T) {
+	type resultCreate struct {
+		Success bool `json:"success"`
+	}
+
+	testCases := []struct {
+		name             string
+		request          func() (req *http.Request, err error)
+		expectStatusCode int
+		check            func(body io.Reader)
+		description      string
+	}{
+		{
+			name: "Update clients",
+			request: func() (req *http.Request, err error) {
+				form := forms.Clients{
+					ID:           1,
+					Number:       1,
+					Address:      "San Fancisco Main street 88",
+					CuitCustomer: "Some customer",
+					ClientPhone:  "123456789012",
+					ClientTypeID: 1,
+				}
+				jsonForm, _ := json.Marshal(form)
+				req, err = http.NewRequest("PUT", "/clients/update", bytes.NewBuffer(jsonForm))
+				req.Header.Set("Content-Type", "application/json")
+				return
+			},
+			check: func(body io.Reader) {
+				bodyBytes, err := ioutil.ReadAll(body)
+				assert.Nil(t, err)
+
 				var resCreate resultCreate
 				err = json.Unmarshal(bodyBytes, &resCreate)
 				assert.Nil(t, err)
