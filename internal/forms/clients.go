@@ -7,7 +7,7 @@ import (
 
 // Clients ...
 type Clients struct {
-	Pagination   Pagination
+	Pagination
 	ID           int64  `valid:"type(int64)" json:"id"`
 	Number       int64  `valid:"type(int64)" json:"num"`
 	Address      string `valid:"length(0|50)" json:"addr"`

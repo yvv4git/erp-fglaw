@@ -22,7 +22,7 @@ func (h *ClientsHandler) main(c *fiber.Ctx) error {
 func (h *ClientsHandler) read(c *fiber.Ctx) error {
 	form := new(forms.Clients)
 
-	if err := c.BodyParser(form); err != nil {
+	if err := c.QueryParser(form); err != nil {
 		return err
 	}
 
