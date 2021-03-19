@@ -72,7 +72,7 @@ func (f *ClientTypes) Delete(db *gorm.DB) (err error) {
 	return db.Delete(&clientTypes).Error
 }
 
-// Count is used for provides the number of records relevant to the query..
+// Count is used for provides the number of records relevant to the query.
 func (f *ClientTypes) Count(db *gorm.DB) (result int64, err error) {
 	// Fill from form.
 	var clientTypes domain.ClientTypes

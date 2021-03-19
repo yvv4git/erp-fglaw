@@ -85,8 +85,7 @@ func TestClientsForm_ReadPage(t *testing.T) {
 	testCases := []struct {
 		name        string
 		form        forms.Clients
-		check       func(db *gorm.DB, result []domain.Clients)
-		wantErr     bool
+		check       func(db *gorm.DB, result []domain.Clients, count int64)
 		description string
 	}{
 		{
@@ -97,10 +96,10 @@ func TestClientsForm_ReadPage(t *testing.T) {
 					Limit: 10,
 				},
 			},
-			check: func(db *gorm.DB, result []domain.Clients) {
-				assert.Equal(t, 3, len(result))
+			check: func(db *gorm.DB, result []domain.Clients, count int64) {
+				assert.Equal(t, 10, len(result), "Check count entities relevant query with pagination")
+				assert.Equal(t, int64(11), count, "Check count entities relevant query")
 			},
-			wantErr:     false,
 			description: "Find clients entities for first page.",
 		},
 		{
@@ -111,10 +110,10 @@ func TestClientsForm_ReadPage(t *testing.T) {
 					Limit: 10,
 				},
 			},
-			check: func(db *gorm.DB, result []domain.Clients) {
-				assert.Equal(t, 0, len(result))
+			check: func(db *gorm.DB, result []domain.Clients, count int64) {
+				assert.Equal(t, 1, len(result), "Check count entities relevant query with pagination")
+				assert.Equal(t, int64(11), count, "Check count entities relevant query")
 			},
-			wantErr:     false,
 			description: "Find clients entities for second page. No found.",
 		},
 	}
@@ -124,12 +123,12 @@ func TestClientsForm_ReadPage(t *testing.T) {
 			tests.PrepareTestDatabase()
 
 			result, err := tc.form.ReadPage(db)
-			if tc.wantErr {
-				assert.NotNil(t, err)
-			} else {
-				assert.Nil(t, err)
-				tc.check(db, result)
-			}
+			assert.Nil(t, err)
+
+			count, err := tc.form.Count(db)
+			assert.Nil(t, err)
+
+			tc.check(db, result, count)
 		})
 	}
 }

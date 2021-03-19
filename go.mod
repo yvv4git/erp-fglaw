@@ -9,7 +9,6 @@ require (
 	github.com/gofiber/template v1.6.6
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.7.0
-	gopkg.in/dealancer/validate.v2 v2.1.0 // indirect
 	gorm.io/driver/sqlite v1.1.4
 	gorm.io/gorm v1.20.12
 )

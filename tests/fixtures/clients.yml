@@ -18,3 +18,59 @@
   cuit_customer: Some unknown string
   client_phone: +12345678903
   client_type_id: 3
+
+- id: 4
+  number: 4
+  address: 25 East 57th Street, New York, NY 10022
+  cuit_customer: Some unknown string
+  client_phone: +12345678904
+  client_type_id: 2
+
+- id: 5
+  number: 5
+  address: 55 East 59th Street, New York, NY 10022
+  cuit_customer: Some unknown string
+  client_phone: +12345678905
+  client_type_id: 1
+
+- id: 6
+  number: 6
+  address: 77 East 88th Street, New York, NY 10022
+  cuit_customer: Some unknown string
+  client_phone: +12345678906
+  client_type_id: 3
+
+- id: 7
+  number: 7
+  address: 1 East 90h Street, Boston, NY 10011
+  cuit_customer: Some unknown string
+  client_phone: +12345678907
+  client_type_id: 2
+
+- id: 8
+  number: 8
+  address: 8 East 98h Street, Boston, NY 10011
+  cuit_customer: Some unknown string
+  client_phone: +12345678908
+  client_type_id: 1
+
+- id: 9
+  number: 9
+  address: 9 East 99h Street, Boston, NY 10019
+  cuit_customer: Some unknown string
+  client_phone: +12345678909
+  client_type_id: 2
+
+- id: 10
+  number: 10
+  address: 10 East 110h Street, Boston, NY 10010
+  cuit_customer: Some unknown string
+  client_phone: +12345678910
+  client_type_id: 3
+
+- id: 11
+  number: 11
+  address: 11 East 111h Street, Boston, NY 10011
+  cuit_customer: Some unknown string
+  client_phone: +12345678911
+  client_type_id: 1

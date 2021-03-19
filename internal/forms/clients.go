@@ -75,3 +75,19 @@ func (f *Clients) Delete(db *gorm.DB) (err error) {
 	clients.ID = int(f.ID)
 	return db.Delete(&clients).Error
 }
+
+// Count is used for provides the number of client entities relevant to the query.
+func (f *Clients) Count(db *gorm.DB) (result int64, err error) {
+	// Fill from form.
+	var clients domain.Clients
+	clients.ID = int(f.ID)
+	clients.Number = int(f.Number)
+	clients.Address = f.Address
+	clients.CuitCustomer = f.CuitCustomer
+	clients.ClientPhone = f.ClientPhone
+	clients.ClientTypeID = int(f.ClientTypeID)
+
+	// Get count of entities.
+	err = db.Model(&domain.Clients{}).Where(&clients).Count(&result).Error
+	return
+}
