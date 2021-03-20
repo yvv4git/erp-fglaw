@@ -15,7 +15,7 @@ type ClientsHandler struct {
 
 func (h *ClientsHandler) main(c *fiber.Ctx) error {
 	return c.Render("clients/index", fiber.Map{
-		"Title": "Main page",
+		"Title": "Clients",
 	})
 }
 
