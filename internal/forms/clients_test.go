@@ -144,7 +144,7 @@ func TestClientsForm_Create(t *testing.T) {
 		{
 			name: "Create clients entity.",
 			form: forms.Clients{
-				Number:       4,
+				Number:       12,
 				Address:      "2790 Green Street San-Francisco, CA 94123",
 				CuitCustomer: "Some unknown string",
 				ClientPhone:  "+17133373300",
@@ -156,7 +156,7 @@ func TestClientsForm_Create(t *testing.T) {
 				err := db.
 					Joins("JOIN client_types on client_types.id = clients.client_type_id").
 					Preload("ClientType").
-					Where("number = ?", 4).
+					Where("number = ?", 12).
 					First(&clients).Error
 				assert.Nil(t, err, "Find new client")
 				assert.Equal(t, "Orba Social", clients.ClientType.ClientType, "Relation join table")
