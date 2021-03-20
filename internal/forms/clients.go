@@ -28,7 +28,10 @@ func (f *Clients) ReadPage(db *gorm.DB) (result []domain.Clients, err error) {
 	clients.ClientTypeID = int(f.ClientTypeID)
 
 	// Find in data storage.
-	err = db.Where(&clients).
+	err = db.
+		Joins("JOIN client_types on client_types.id = clients.client_type_id").
+		Preload("ClientType").
+		Where(&clients).
 		Offset(f.Pagination.Offset()).
 		Limit(int(f.Pagination.Limit)).
 		Find(&result).Error
