@@ -1,42 +1,254 @@
 {% extends "./layout/main.html" %}
 
 {% block content %}
-
 <div class="jumbotron bg-white">
-    <!-- <h3>{{Title}}</h3> -->
-    <div role="main" class="container row"></main>
+  <div role="main" class="row" id="clientsApp">
+    </main>
 
-      <div class="card">
-        <div class="card-header">
-          {{ Title }}
+    <!-- Main data block -->
+    <div class="card">
+      <div class="card-header">
+        {{ Title }}
+      </div>
+
+      <!-- Block with all concrete page logic -->
+      <div class="card-body">
+
+        <!-- Actions block -->
+        <div class="btn-group" role="group" aria-label="Button menu">
+          <button type="button" class="btn btn-warning" v-on:click="addFormShow">Add</button>
         </div>
-        <div class="card-body">
-          <!-- <h5 class="card-title">Main menu</h5> -->
 
-          <ul class="list-group">
-            <li class="list-group-item">
-              <a href="/products" class="card-link text-dark">Products</a>
-            </li>
-            <li class="list-group-item">
-              <a href="/stock" class="card-link text-dark">Stock</a>
-            </li>
-            <li class="list-group-item">
-              <a href="/transactions" class="card-link text-dark">Transactions</a>
-            </li>
-            <li class="list-group-item">
-              <a href="/supplers" class="card-link text-dark">Suppliers</a>
-            </li>
-            <li class="list-group-item">
-              <a href="/clients" class="card-link text-dark">Clients</a>
-            </li>
-            <li class="list-group-item">
-              <a href="/client-types" class="card-link text-dark">Client types</a>
-            </li>
-          </ul>
+        <!-- Table block -->
+        <table class="table table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th>ID</th>
+              <th>Number</th>
+              <th>Address</th>
+              <th>CuitCustomer</th>
+              <th>ClientPhone</th>
+              <th>ClientTypeID</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in clients" v-bind:key="item.ID">
+              <td>{(item.ID)}</td>
+              <td>{(item.Number)}</td>
+              <td>{(item.Address)}</td>
+              <td>{(item.CuitCustomer)}</td>
+              <td>{(item.ClientPhone)}</td>
+              <td>{(item.ClientTypeID)}</td>
+              <td>
+                <i class="bi-pencil-fill" v-on:click="editFormShow(item)"></i>
+                <i class="bi-trash" v-on:click="submitDeleteForm(item.ID)"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
+        <!-- Pagination block -->
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-secondary" v-on:click="pageLeft">Left</button>
+          <button type="button" class="btn btn-secondary" disabled>{(page+1)}/{(pagesCount)}</button>
+          <button type="button" class="btn btn-secondary" v-on:click="pageRight">Right</button>
         </div>
+
       </div>
 
     </div>
+
+    <!-- Block add -->
+    <div class="card ml-3" v-if="showFormAdd">
+      <div class="card-header">
+        Add
+      </div>
+      <div class="card-body">
+
+        <!-- Form add -->
+        <form id="clientsFormAdd">
+          <div class="form-group">
+            <label>Number</label>
+            <input type="text" class="form-control" id="number" v-model="formAdd['num']">
+            <small class="form-text text-muted">Client number</small>
+          </div>
+          <div class="form-group">
+            <label>Address</label>
+            <input type="text" class="form-control" id="addr" v-model="formAdd['addr']">
+            <small class="form-text text-muted">Client address</small>
+          </div>
+          <div class="form-group">
+            <label>CuitCustomer</label>
+            <input type="text" class="form-control" id="cuit" v-model="formAdd['cuit']">
+            <small class="form-text text-muted">CuitCustomer - ???</small>
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="text" class="form-control" id="phone" v-model="formAdd['phone']">
+            <small class="form-text text-muted">Client phone</small>
+          </div>
+          <div class="form-group">
+            <label>Client types id</label>
+            <input type="text" class="form-control" id="typeid" v-model="formAdd['typeid']">
+            <small class="form-text text-muted">Client types id</small>
+          </div>
+          <button type="button" class="btn btn-warning" v-on:click="submitAddForm">Add</button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- Block edit -->
+    <div class="card ml-3" v-if="showFormEdit">
+      <div class="card-header">
+        Edit
+      </div>
+      <div class="card-body">
+
+        <!-- Form edit -->
+        <form id="clientsFormEdit">
+          <div class="form-group">
+            <label>Number</label>
+            <input type="text" class="form-control" name="num" v-model="formEdit.num">
+          </div>
+          <div class="form-group">
+            <label>Address</label>
+            <input type="text" class="form-control" name="addr" v-model="formEdit.addr">
+          </div>
+          <div class="form-group">
+            <label>CuitCustomer</label>
+            <input type="text" class="form-control" name="cuit" v-model="formEdit.cuit">
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="text" class="form-control" name="phone" v-model="formEdit.phone">
+          </div>
+          <div class="form-group">
+            <label>Client types id</label>
+            <input type="text" class="form-control" name="typeid" v-model="formEdit.typeid">
+          </div>
+          <button type="button" class="btn btn-warning" v-on:click="submitEditForm">Edit</button>
+        </form>
+
+      </div>
+    </div>
+
   </div>
+</div>
+
+<script>
+  new Vue({
+    el: '#clientsApp',
+    delimiters: ['{(', ')}'],
+    data: {
+      showFormAdd: false,
+      showFormEdit: false,
+      limit: 10,
+      page: 0,
+      pagesCount: 0,
+      clients: {},
+      formAdd: {},
+      formEdit: {},
+    },
+    methods: {
+      addFormShow: function () {
+        this.showFormAdd = !this.showFormAdd;
+        this.showFormEdit = false;
+      },
+      editFormShow: function (clients) {
+        this.showFormAdd = false;
+        this.showFormEdit = false;
+        this.formEdit.id = clients.ID;
+        this.formEdit.num = clients.Number;
+        this.formEdit.addr = clients.Address;
+        this.formEdit.cuit = clients.CuitCustomer;
+        this.formEdit.phone = clients.ClientPhone;
+        this.formEdit.typeid = clients.ClientTypeID;
+        this.showFormEdit = true;
+      },
+      loadTable: function () {
+        vm = this;
+        axios
+          .get('http://localhost:3001/clients/read', {
+            params: {
+              limit: this.limit,
+              page: this.page,
+            }
+          })
+          .then(function (response) {
+            vm.clients = response.data.clients;
+            vm.pagesCount = Math.ceil(response.data.count / vm.limit);
+          })
+          .catch(function (error) {
+            console.log('Error with request to get clients: ' + error)
+          });
+      },
+      pageLeft: function () {
+        if (this.page > 0) {
+          this.page--;
+        }
+        this.loadTable();
+      },
+      pageRight: function () {
+        this.page++;
+        this.loadTable();
+      },
+      submitAddForm: function () {
+        console.log('submitAddForm');
+        const headers = {
+          'content-type': 'application/json',
+        };
+        let vm = this;
+        vm.formAdd.num = parseInt(vm.formAdd.num, 10);
+        vm.formAdd.typeid = parseInt(vm.formAdd.typeid, 10);
+        axios
+          .post('http://localhost:3001/clients/create', vm.formAdd, headers)
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+        this.loadTable();
+      },
+      submitEditForm: function () {
+        console.log('submitEditForm');
+        const headers = {
+          'content-type': 'application/json',
+        };
+        let vm = this;
+        vm.formEdit.num = parseInt(vm.formEdit.num, 10);
+        vm.formEdit.typeid = parseInt(vm.formEdit.typeid, 10);
+        axios
+          .put('http://localhost:3001/clients/update', vm.formEdit, headers)
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+        this.loadTable();
+      },
+      submitDeleteForm: function (elementID) {
+        console.log('submitDeleteForm: ', elementID);
+        axios
+          .delete('http://localhost:3001/clients/delete', { data: { id: elementID } })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+        this.loadTable();
+      }
+    },
+    mounted() {
+      this.loadTable();
+    },
+  });
+</script>
 {% endblock %}
