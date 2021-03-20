@@ -127,9 +127,7 @@
           <div class="form-group">
             <label>Client types id</label>
             <select class="form-control" v-model="formEdit.typeid">
-              <option value="1">Orba Social</option>
-              <option value="2">Hospital</option>
-              <option value="3">Awesome</option>
+              <option v-for="(item, index) in clientTypes" v-bind:value="item.ID">{(item.ClientType)}</option>
             </select>
           </div>
           <button type="button" class="btn btn-warning" v-on:click="submitEditForm">Edit</button>
@@ -152,6 +150,7 @@
       page: 0,
       pagesCount: 0,
       clients: {},
+      clientTypes: {},
       formAdd: {},
       formEdit: {},
     },
@@ -186,6 +185,22 @@
           })
           .catch(function (error) {
             console.log('Error with request to get clients: ' + error)
+          });
+      },
+      loadClientTypesList: function () {
+        vm = this;
+        axios
+          .get('http://localhost:3001/client-types/read', {
+            params: {
+              limit: 100,
+              page: 0,
+            }
+          })
+          .then(function (response) {
+            vm.clientTypes = response.data.client_types;
+          })
+          .catch(function (error) {
+            console.log('Error with request to get client-types: ' + error)
           });
       },
       pageLeft: function () {
@@ -252,6 +267,7 @@
     },
     mounted() {
       this.loadTable();
+      this.loadClientTypesList();
     },
   });
 </script>
